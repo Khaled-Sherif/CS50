@@ -46,7 +46,7 @@ More Info about Google Books Api can be found [here](https://developers.google.c
 
 - Filter search results based on 5 attributes.
 
-![filter_result](https://user-images.githubusercontent.com/66789935/219908784-44974109-a864-4486-b8f9-b5e9630f6e6b.png)
+![filter_result](https://user-images.githubusercontent.com/66789935/221379160-a3818e25-2962-4754-90bf-20987faabc22.png)
 
 - View book Information like desribtion, autor, category....etc. and the ability to add the books to my books by selecting the book as a favourite or adding it to a shelf
 
@@ -58,7 +58,7 @@ More Info about Google Books Api can be found [here](https://developers.google.c
 
 - View my books library and filter books in my books library based on 6 attributes and sort each shelf based on 3 attributes.
 
-![View_my_books](https://user-images.githubusercontent.com/66789935/219909010-0066a1d3-fcfd-45cd-9b29-a0a3702af650.PNG)
+![View_my_books](https://user-images.githubusercontent.com/66789935/221379171-9c889f8a-8d64-44a7-a8a4-99450328ad3e.PNG)
 
 - View Book shelf insights on Bookify based on all users data.
 
