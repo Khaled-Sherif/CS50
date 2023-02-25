@@ -1,0 +1,249 @@
+{% extends "layout.html" %}
+      {% block script %}
+          items = myFunc({{results|tojson}})
+          itemsObjects = objectifyItems(items)
+      {% endblock %}
+
+          {% block main %}
+            <div id='header-section'>
+                <div id='search_area'>
+                    <h1 id='Logo'>Bookify!</h1>
+                    <p id='header-msg'>We help you search and find info about millions of books</p>
+                    <div id='search_box'>
+                        <form action="/" method="post">
+                          {% if filters %}
+                            <input  placeholder='Search books, authors and categories' name='search_words' id='search' type=text value="{{ filters['keywords'] }}" width="300px">
+                            {% else %}
+                            <input  placeholder='Search books, authors and categories' name='search_words' id='search' type=text value="{{ keywords }}" width="300px">
+                          {% endif %}
+                            <button type="submit" id='submit' class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id = 'filter-bar'>
+              {% if filters %}
+                <form action="/search" method="get">
+                  <input type="hidden" name="keywords" value="{{ filters['keywords'] }}">
+                  <div id='filter-content'>
+                    <span class='filter-attr'>
+                      <p>Order by</p>
+                      <select name="relevance">
+                          <option value="relevance" {% if filters['relevance']=='relevance' %} selected="selected"{% endif %}>Relevant</option>
+                          <option value="newest" {% if filters['relevance']=='newest' %} selected="selected"{% endif %}>Newest</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Search by</p>
+                      <select name="search-by">
+                        <option value="" {% if filters['search_type']=="" %} selected="selected"{% endif %}>All</option>
+                        <option value="intitle:" {% if filters['search_type']=="intitle" %} selected="selected"{% endif %}>Books</option>
+                        <option value="inauthor:" {% if filters['search_type']=="inauthor" %} selected="selected"{% endif %}>Authors</option>
+                        <option value="subject:" {% if filters['search_type']=="subject" %} selected="selected"{% endif %}>Categories</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Readability</p>
+                      <select name="read-availability">
+                          <option value="" {% if filters['readability']=="" %} selected="selected"{% endif %}>All</option>
+                          <option value="partial" {% if filters['readability']=="partial" %} selected="selected"{% endif %}>Partial</option>
+                          <option value="full" {% if filters['readability']=="full" %} selected="selected"{% endif %}>Full</option>
+                          <option value="free-ebooks" {% if filters['readability']=="free-ebooks" %} selected="selected"{% endif %}>Free ebooks</option>
+                          <option value="paid-ebooks" {% if filters['readability']=="paid-ebooks" %} selected="selected"{% endif %}>Paid ebooks</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Print type</p>
+                      <select name="print_typ">
+                          <option value="all" {% if filters['print_type']=="all" %} selected="selected"{% endif %}>All</option>
+                          <option value="books" {% if filters['print_type']=="books" %} selected="selected"{% endif %}>Books</option>
+                          <option value="magazines" {% if filters['print_type']=="magazines" %} selected="selected"{% endif %}>Magazines</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Language</p>
+                      <select name="lang">
+                          <option value="" {% if filters['lang']=="" %} selected="selected"{% endif %}>All</option>
+                          <option value="ar" {% if filters['lang']=="ar" %} selected="selected"{% endif %}>Arabic</option>
+                          <option value="zh" {% if filters['lang']=="zr" %} selected="selected"{% endif %}>Chinese</option>
+                          <option value="en" {% if filters['lang']=="en" %} selected="selected"{% endif %}>English</option>
+                          <option value="fr" {% if filters['lang']=="fr" %} selected="selected"{% endif %}>French</option>
+                          <option value="de" {% if filters['lang']=="de" %} selected="selected"{% endif %}>German</option>
+                          <option value="hi" {% if filters['lang']=="hi" %} selected="selected"{% endif %}>Hindi</option>
+                          <option value="it" {% if filters['lang']=="it" %} selected="selected"{% endif %}>Italian</option>
+                          <option value="ru" {% if filters['lang']=="ru" %} selected="selected"{% endif %}>Russian</option>
+                      </select>
+                    </span>
+                    <button type='submit' id='filter'>Filter</button>
+                  </div>
+                </form>
+              {% else %}
+                <form action="/search" method="get">
+                  <input type="hidden" name="keywords" value="{{keywords}}">
+                  <div id='filter-content'>
+                    <span class='filter-attr'>
+                      <p>Order by</p>
+                      <select name="relevance">
+                          <option value="relevance">Relevant</option>
+                          <option value="newest">Newest</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Search by</p>
+                      <select name="search-by">
+                        <option value="">All</option>
+                        <option value="intitle">Books</option>
+                        <option value="inauthor">Authors</option>
+                        <option value="subject">Categories</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Readability</p>
+                      <select name="read-availability">
+                          <option value="">All</option>
+                          <option value="partial">Partial</option>
+                          <option value="full">Full</option>
+                          <option value="free-ebooks">Free ebooks</option>
+                          <option value="paid-ebooks">Paid ebooks</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Print type</p>
+                      <select name="print_typ">
+                          <option value="all">All</option>
+                          <option value="books">Books</option>
+                          <option value="magazines">Magazines</option>
+                      </select>
+                    </span>
+                    <span class='filter-attr'>
+                      <p>Language</p>
+                      <select name="lang">
+                          <option value="">All</option>
+                          <option value="ar">Arabic</option>
+                          <option value="zh">Chinese</option>
+                          <option value="en">English</option>
+                          <option value="fr">French</option>
+                          <option value="de">German</option>
+                          <option value="hi">Hindi</option>
+                          <option value="it">Italian</option>
+                          <option value="ru">Russian</option>
+                      </select>
+                    </span>
+                    <button type='submit' id='filter'>Filter</button>
+                  </div>
+                </form>
+              {% endif %}
+            </div>
+            <div id="container">
+                {% if post %}
+                  <div id='result'>
+                    {% for book in results %}
+                      <div class="card" data-item-id="{{book['id']}}"  data-index="{{ loop.index }}" style="width:18rem;">
+                          <div id='item' class="card-body">
+                            <h5 class="card-title">{{ book['volumeInfo']['title'] }}</h5>
+                            {% if book['volumeInfo']['authors'] %}
+                              <h6 class="card-subtitle mb-2 text-muted">{{', '.join(book['volumeInfo']['authors'])}}</h6>
+                            {% endif %}
+                            {% if book['volumeInfo']['imageLinks'] %}
+                              <img src="{{ book['volumeInfo']['imageLinks']['thumbnail'] }}" style="width: 13rem; height:16rem;" alt="Flowers in Chania">
+                            {% else %}
+                              <div class="alt-img">
+                                <h6 class='alt-txt'>Image not available</h6>
+                              </div>
+
+                            {% endif %}
+
+                            {% if book['volumeInfo']['description'] %}
+                              <p class="card-text">{{ str(book['volumeInfo']['description']) }}</p>
+                            {% elif book['searchInfo'] %}
+                              <p class="card-text">{{ str(book['searchInfo']['textSnippet']) }}</p>
+                            {% else %}
+                              <p class="card-text" style="padding-top:3rem"><b style="height:6.3rem;">No description</b></p>
+                            {% endif %}
+                          </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                <nav id="pagination-bar">
+                  {% if filters %}
+                    <ul class="pagination">
+                      {% if filters['page'] == 1 %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="search?keywords={{ filters['keywords'] }}&page={{ (filters['page'] | int) - 1 }}&relevance={{filters['relevance']}}&read-availability={{filters['readability']}}&print_typ={{filters['print_type']}}&lang={{filters['lang']}}">Previous</a>
+                        </li>
+                        <li class="page-item disabled"><a class="page-link" href="search?keywords={{ filters['keywords'] }}&page={{ (filters['page'] | int) - 1 }}&relevance={{filters['relevance']}}&read-availability={{filters['readability']}}&print_typ={{filters['print_type']}}&lang={{filters['lang']}}">{{ (filters['page'] | int) - 1 }}</a></li>
+                      {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="search?keywords={{ filters['keywords'] }}&page={{ (filters['page'] | int) - 1 }}&relevance={{filters['relevance']}}&read-availability={{filters['readability']}}&print_typ={{filters['print_type']}}&lang={{filters['lang']}}">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="search?keywords={{ filters['keywords'] }}&page={{ (filters['page'] | int) - 1 }}&relevance={{filters['relevance']}}&read-availability={{filters['readability']}}&print_typ={{filters['print_type']}}&lang={{filters['lang']}}">{{ (filters['page'] | int) - 1 }}</a></li>
+                      {% endif %}
+                      <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ filters['page'] }}</span>
+                      </li>
+                      <li class="page-item"><a class="page-link" href="search?keywords={{ filters['keywords'] }}&page={{ (filters['page'] | int) + 1 }}&relevance={{filters['relevance']}}&read-availability={{filters['readability']}}&print_typ={{filters['print_type']}}&lang={{filters['lang']}}">{{ (filters['page'] | int) + 1 }}</a></li>
+                      <li class="page-item">
+                        <a class="page-link" href="search?keywords={{ filters['keywords'] }}&page={{ (filters['page'] | int) + 1 }}&relevance={{filters['relevance']}}&read-availability={{filters['readability']}}&print_typ={{filters['print_type']}}&lang={{filters['lang']}}">Next</a>
+                      </li>
+                    </ul>
+                  {% else %}
+                    <ul class="pagination">
+                      {% if page == 1 %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="search?keywords={{ keywords }}&page={{ page - 1 }}&relevance=relevance&read-availability=&print_typ=all&lang=">Previous</a>
+                        </li>
+                        <li class="page-item disabled"><a class="page-link" href="search?keywords={{ keywords }}&page={{ page - 1 }}&relevance=relevance&read-availability=&print_typ=all&lang=">{{ page - 1 }}</a></li>
+                      {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="search?keywords={{ keywords }}&page={{ page - 1 }}&relevance=relevance&read-availability=&print_typ=all&lang=">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="search?keywords={{ keywords }}&page={{ page - 1 }}&relevance=relevance&read-availability=&print_typ=all&lang=">{{ page - 1 }}</a></li>
+                      {% endif %}
+                      <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page }}</span>
+                      </li>
+                      <li class="page-item"><a class="page-link" href="search?keywords={{ keywords }}&page={{ page + 1}}&relevance=relevance&read-availability=&print_typ=all&lang=">{{ page + 1 }}</a></li>
+                      <li class="page-item">
+                        <a class="page-link" href="search?keywords={{ keywords }}&page={{ page + 1 }}&relevance=relevance&read-availability=&print_typ=all&lang=">Next</a>
+                      </li>
+                    </ul>
+                  {% endif %}
+                </nav>
+            </div>
+            <div id='recently-viewed' class='items-list' style="width: 91em; margin:7em 0 3em;border-top: 1px solid;border-bottom: 1px solid;border-radius: 0rem;background: none;">
+              <div class='list-header'>
+                  <span  class='list-title'>
+                      <h2>Recently viewed</h2>
+                  </span>
+              </div>
+              <div class='slider'>
+                  <div class='list-window' style="width: 65rem;">
+                          <h1 class='hide-element' style="display: block; color: grey; margin: 3rem;">
+                              Empty
+                          </h1>
+                          <div class='list-content'>
+                          </div>
+                  </div>
+                      <button id='bck' class='slider-btn hide-element' style="left:8%;">
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                              <path fill="grey" d="m30.9 43l3.1-3.1L18.1 24L34 8.1L30.9 5L12 24z"></path>
+                          </svg>
+                      </button>
+                      <button id='fwd' class='slider-btn hide-element' style="right:8%; border-color:black;">
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                                  <path fill="grey" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                                  <path fill="black" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                          </svg>
+                      </button>
+              </div>
+          </div>
+          {% endblock %}
+        </main>
+        
+    </body>
+</html>

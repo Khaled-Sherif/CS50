@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+    {% block main %}
+        <div id='header-section'>
+            <div id='search_area' style='height:10em !important'>
+                <h1 id='Logo' >About</h1>
+
+            </div>
+        </div>
+        <div class='about' style='height:30em'>
+            <p style="font-size:20px; margin:3em;">
+                Bookify is a web application based on restful API that helps the application perform full-text searches and retrieve book information,<br>
+                viewability, and eBook availability.<br><br>
+                More information about Googe books API can be found <a href="https://developers.google.com/books/docs/overview">here</a>.<br><br>
+
+                The web application is supposed to serve mainly as an advanced search engine that can submit full-text searches for books<br>
+                and get book information, ratings, and reviews. Optionally get individual users' library collections and public reviews.<br>
+                Submit authenticated requests to create and modify library collections, ratings, labels, reviews, and more<br><br>
+
+                This Application is a final project for the CS50 course, that demonstrates the understandability of the techniques and material offered in this course.<br><br>
+                More information about CS50 course can be found <a href="https://pll.harvard.edu/course/cs50-introduction-computer-science?delta=0">here</a><br>
+
+            </p>
+        </div>
+    {% endblock %}

@@ -1,0 +1,207 @@
+{% extends "layout.html" %}
+
+
+{% block title %}My collection{% endblock %}
+
+{% block script %}
+    items = myFunc({{items|tojson}})
+{% endblock %}
+
+{% block main %}
+    <div id='collection-items'>
+        <div id='favourites' class='items-list'>
+            <div class='list-header'>
+                <span  class='list-title'>
+                    <h2>Favorites</h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="black" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" style="fill: #1c1c1c;"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class='slider'>
+                <div class='list-window'>
+                    {% if items['favourites']|length == 0 %}
+                        <h1 style="display: block; color: grey; margin: 3rem;">
+                            Empty
+                        </h1>
+                    {% else %}
+                        <div class='list-content'>
+                            {% for item in items['favourites'] %}
+                                <div id="item" class="list-item" data-item-index={{ loop.index }} data-item-id={{ item['id']}}>
+                                    <img src="{{item['image_url']}}" class='item-img' style="width: 9rem; height:13rem;">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                {% if items['favourites']|length > 4 %}
+                    <button id='bck' class='slider-btn' style="left:8%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                            <path fill="grey" d="m30.9 43l3.1-3.1L18.1 24L34 8.1L30.9 5L12 24z"></path>
+                        </svg>
+                    </button>
+                    <button id='fwd' class='slider-btn' style="right:8%; border-color:black;">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                                <path fill="grey" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                                <path fill="black" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                        </svg>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <div id='shelves'>
+            <div class="filter-collection">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="1.8em" height="1.8em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36" class="iconify iconify--clarity">
+                        <path fill="currentColor" d="M33 4H3a1 1 0 0 0-1 1v1.67a1.79 1.79 0 0 0 .53 1.27L14 19.58v10.2l2 .76V19a1 1 0 0 0-.29-.71L4 6.59V6h28v.61L20.33 18.29A1 1 0 0 0 20 19v13.21l2 .79V19.5L33.47 8A1.81 1.81 0 0 0 34 6.7V5a1 1 0 0 0-1-1Z" class="clr-i-outline clr-i-outline-path-1"></path>
+                    </svg>
+                </span>
+                <div class="filter-bar">
+                    <span class="filter-attr"  style="column-gap: 1rem;">
+                        <label for="fname">Keywords</label>
+                        <input type="text" id="keywords" name="keywords" placeholder='Type keywords' style="width: 9em; height: 2rem;font-size: 15px; padding: 0.5rem;">
+                    </span>
+                    <span id='categories' class="filter-attr">
+                        <button>
+                            <label>Categories <inline>(0)</inline></label>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" style="margin: 0.3rem;">
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"></path>
+                            </svg>
+                        </button>
+                        <ul class="filter-dropdown">
+                            {% for category in filter_attributes['categories'] %}
+                                <li><span class="dropdown-item" data-select='0'>{{category}}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </span>
+                    <span id='languages' class="filter-attr">
+                        <button>
+                            <label>Languages <inline>(0)</inline></label>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" style="margin: 0.3rem;">
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"></path>
+                            </svg>
+                        </button>
+                        <ul class="filter-dropdown">
+                            {% for language in filter_attributes['languages'] %}
+                                <li><span class="dropdown-item" data-select='0' data-value='{{language}}'>{{language}}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </span>
+                    <div id='release-year' class="filter-attr">
+                        <button>
+                            <label>Release year ( <inline class='year-from'>{{ filter_attributes['release date']|min }}</inline> - <inline class='year-to'>{{ filter_attributes['release date']|max }}</inline> )</label>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" style="margin: 0.3rem;">
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"></path>
+                            </svg>
+                        </button>
+                        <div class="filter-dropdown" style="justify-content: center;">
+                            <div class="filter-range" style=" display:flex; flex-direction: row; 1rem; column-gap: 0.5rem;">
+                                <input id='year-from' type="number" min="0" max="2099" step="1" name='year-from' value="{{ filter_attributes['release date']|min }}" style="border-radius: 0.3rem;width: 4rem;">
+                                :
+                                <input id='year-to' type="number" min="0" max="2099" step="1" name='year-to' value="{{ filter_attributes['release date']|max }}" style="border-radius: 0.3rem;width: 4rem;">                          
+                            </div>
+                        </div>
+                    </div>
+                    <div id="page-count" class="filter-attr">
+                        <button>
+                            <label>Page count (Max: <inline class='page-count-no'>{{ filter_attributes['page counts']|max }}</inline>)</label>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" style="margin: 0.3rem;">
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"></path>
+                            </svg>
+                        </button>
+                        <div class="filter-dropdown" style="justify-content: center;">
+                            <div class="filter-range" style="padding: 1rem; column-gap: 1rem;">
+                                <div style="display: flex; column-gap: 1rem;">
+                                    <label>Max</label>
+                                    <input id='page-count-no' type="number" min="0" name='page-count-no' value="{{ filter_attributes['page counts']|max }}" style="border-radius: 0.3rem;width: 4rem;text-align: center; border:1px solid;">                                
+                                </div>
+                                <input id="page-count-range"  type="range" min="{{ filter_attributes['page counts']|min }}" name='page-count-range' max="{{ filter_attributes['page counts']|max }}" value="{{ filter_attributes['page counts']|max }}" style="width: 8rem;">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="filter-btn">Filter</button>
+                </div>
+                <span id="reset">Reset</span>   
+            </div>
+            {% for key, value in items['shelves'].items() %}
+                <div id='{{key}}' class='shelf-list'>
+                    <div class='list-header'>
+                        <span  class='list-title'>
+                            <h2>{{key}}</h2>
+                        </span>
+                        <div class='header-bar'>
+                            <div class="sort-attr">
+                                <p style="font-weight: 500;">Sort by</p>
+                                <span>
+                                    <p style="margin-top: 1rem;">Name</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" class="iconify iconify--ep">
+                                        <path fill="black" d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8l316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z"></path>
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-icon-name" width="1.5em" height="1.5em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 8 8" style="padding: 0.2em; border: 1px solid;
+                                    border-radius: .3rem;" class="sort-order" data-select='0'>
+                                        <path fill="currentColor" d="M2 0v6H0l2.5 2L5 6H3V0H2zm2 0v1h4V0H4zm0 2v1h3V2H4zm0 2v1h2V4H4z"></path>
+                                    </svg>
+                                </span>
+                                <ul class="filter-dropdown" style="width: 3rem;">
+                                    <li><span class="dropdown-item grey-background" data-select='1'>Name</span></li>
+                                    <li><span class="dropdown-item" data-select='0'>Rating</span></li>
+                                    <li><span class="dropdown-item" data-select='0'>Release date</span></li>
+                                    <li><span class="dropdown-item" data-select='0'>Page count</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='slider'>
+                        <div class='list-window'>
+                                <h1 class='empty-shelf hide-element'>
+                                    Empty
+                                </h1>
+                                <div class='list-content'>
+
+                                </div>
+                        </div>
+                            <button id='bck' class='slider-btn hide-element' style="left:-0.8em;">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                                    <path fill="grey" d="m30.9 43l3.1-3.1L18.1 24L34 8.1L30.9 5L12 24z"></path>
+                                </svg>
+                            </button>
+                            <button id='fwd' class='slider-btn hide-element' style="right:-0.8em; border-color:black;">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                                        <path fill="grey" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                                        <path fill="black" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                                </svg>
+                            </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id='recently-viewed' class='items-list' style="width: 91em; margin:7em 0 3em;border-top: 1px solid;border-bottom: 1px solid;border-radius: 0rem;background: none;">
+            <div class='list-header'>
+                <span  class='list-title'>
+                    <h2>Recently viewed</h2>
+                </span>
+            </div>
+            <div class='slider'>
+                <div class='list-window' style="width: 65rem;">
+                        <h1 style="display: block; color: grey; margin: 3rem;">
+                            Empty
+                        </h1>
+                        <div class='list-content'>
+                        </div>
+                </div>
+                    <button id='bck' class='slider-btn hide-element' style="left:8%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                            <path fill="grey" d="m30.9 43l3.1-3.1L18.1 24L34 8.1L30.9 5L12 24z"></path>
+                        </svg>
+                    </button>
+                    <button id='fwd' class='slider-btn hide-element' style="right:8%; border-color:black;">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" id="footer-sample-full" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" class="iconify iconify--flat-color-icons">
+                                <path fill="grey" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                                <path fill="black" d="M17.1 5L14 8.1L29.9 24L14 39.9l3.1 3.1L36 24z"></path>
+                        </svg>
+                    </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
